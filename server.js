@@ -76,22 +76,6 @@ function seedUsersCollection() {
   });
 
   const aseel = new userModel({
-    email: 'Aseel.Hamamreh@hotmail.com',
-    books: [
-      {
-        name : 'a song of ice and fire',
-        description : "A Song of Ice and Fire is a series of epic fantasy novels by the American novelist and screenwriter George R. R. Martin. He began the first volume of the series, A Game of Thrones, in 1991, and it was published in 1996. Martin, who initially envisioned the series as a trilogy, has published five out of a planned seven volumes. The fifth and most recent volume of the series, A Dance with Dragons, was published in 2011 and took Martin six years to write. He is currently writing the sixth novel, The Winds of Winter. A seventh novel, A Dream of Spring, is planned.",
-        status : 'has been read'
-      },
-      {
-        name : 'Pride and Prejudice',
-        description : "Pride and Prejudice, romantic novel by Jane Austen, published anonymously in three volumes in 1813. A classic of English literature, written with incisive wit and superb character delineation, it centers on the turbulent relationship between Elizabeth Bennet, the daughter of a country gentleman, and Fitzwilliam Darcy, a rich aristocratic landowner.",
-        status : 'reading'
-      }
-    ]
-  });
-
-  const aseel2 = new userModel({
     email: 'aseel.hamamreh@hotmail.com',
     books: [
       {
@@ -111,8 +95,7 @@ function seedUsersCollection() {
   // console.log(aseel);
 
   hatem.save();
-  // aseel.save();
-  aseel2.save();
+  aseel.save();
 }
 
 
@@ -126,8 +109,8 @@ app.get('/', (req, res) => {
 });
 
 function getUserInfo(req, res) {
+  // console.log(req.query);
   const { email } = req.query;
-  // console.log(name);
   userModel.find({ email: email }, function (err, user) {
       if (err) {res.send('N/A')};
       // console.log(user[0].books);
@@ -140,6 +123,7 @@ app.post('/user', createNewbook);
 
 function createNewbook(req, res) {
   const { bookName, bookDescription,bookStatus, email } = req.body;
+  // console.log(req.body);
   userModel.find({ email: email }, (err, user) => {
     user[0].books.push({
           name: bookName,
@@ -174,5 +158,4 @@ function deleteBooks(req, res) {
 
 app.listen(port, () => {
   console.log(`Serverinhio startado on ${port}`);
-  console.log('hahaha');
 });
