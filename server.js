@@ -29,29 +29,29 @@ const userSchema = new mongoose.Schema({
 const bookModel = mongoose.model('books', bookSchema);
 const userModel = mongoose.model('users', userSchema);
 
-function seedBooksCollection() {
-  const book1 = new bookModel({
-    name : 'the Son of Man description',
-    description : "Kahlil Gibran's 'Jesus the Son of Man' is a magical book filled with facts about Jesus' life interwoven with complete fantasy. It would be best to only read this book if you have already read the New Testament. ... Kahlil gives us little vignettes of the life of Jesus through the words of those who knew him.",
-    status : 'unread'
-  });
-  const book2 = new bookModel({
-    name : 'The Prophet',
-    description : "The Prophet is a book of 26 prose poetry fables written in English by the Lebanese-American poet and writer Kahlil Gibran. It was originally published in 1923 by Alfred A. Knopf. It is Gibran's best known work. The Prophet has been translated into over 100 different languages, making it one of the most translated books in history, and it has never been out of print.",
-    status : 'unread'
-  });
-  const book3 = new bookModel({
-    name : "Harry Potter and the Philosopher's Stone ",
-    description : "Harry Potter and the Philosopher's Stone is a fantasy novel written by British author J. K. Rowling. The first novel in the Harry Potter series and Rowling's debut novel, it follows Harry Potter, a young wizard who discovers his magical heritage on his eleventh birthday, when he receives a letter of acceptance to Hogwarts School of Witchcraft and Wizardry. Harry makes close friends and a few enemies during his first year at the school, and with the help of his friends, he faces an attempted comeback by the dark wizard Lord Voldemort, who killed Harry's parents, but failed to kill Harry when he was just 15 months old.",
-    status : 'unread'
-  });
+// function seedBooksCollection() {
+//   const book1 = new bookModel({
+//     name : 'the Son of Man description',
+//     description : "Kahlil Gibran's 'Jesus the Son of Man' is a magical book filled with facts about Jesus' life interwoven with complete fantasy. It would be best to only read this book if you have already read the New Testament. ... Kahlil gives us little vignettes of the life of Jesus through the words of those who knew him.",
+//     status : 'unread'
+//   });
+//   const book2 = new bookModel({
+//     name : 'The Prophet',
+//     description : "The Prophet is a book of 26 prose poetry fables written in English by the Lebanese-American poet and writer Kahlil Gibran. It was originally published in 1923 by Alfred A. Knopf. It is Gibran's best known work. The Prophet has been translated into over 100 different languages, making it one of the most translated books in history, and it has never been out of print.",
+//     status : 'unread'
+//   });
+//   const book3 = new bookModel({
+//     name : "Harry Potter and the Philosopher's Stone ",
+//     description : "Harry Potter and the Philosopher's Stone is a fantasy novel written by British author J. K. Rowling. The first novel in the Harry Potter series and Rowling's debut novel, it follows Harry Potter, a young wizard who discovers his magical heritage on his eleventh birthday, when he receives a letter of acceptance to Hogwarts School of Witchcraft and Wizardry. Harry makes close friends and a few enemies during his first year at the school, and with the help of his friends, he faces an attempted comeback by the dark wizard Lord Voldemort, who killed Harry's parents, but failed to kill Harry when he was just 15 months old.",
+//     status : 'unread'
+//   });
 
-  // console.log(book1, book2, book3);
+//   // console.log(book1, book2, book3);
 
-  book1.save();
-  book2.save();
-  book3.save();
-}
+//   book1.save();
+//   book2.save();
+//   book3.save();
+// }
 
 function seedUsersCollection() {
   const hatem = new userModel({
@@ -102,23 +102,27 @@ function seedUsersCollection() {
 // seedUsersCollection();
 // seedBooksCollection();
 
-app.get('/user', getUserInfo);
-
 app.get('/', (req, res) => {
   res.send('hello useless home page');
 });
+
+
+// ************************************************************************************
+// getting email from the frontend to send static data:
+app.get('/user', getUserInfo);
 
 function getUserInfo(req, res) {
   // console.log(req.query);
   const { email } = req.query;
   userModel.find({ email: email }, function (err, user) {
-      if (err) {res.send('N/A')};
-      // console.log(user[0].books);
+    if (err) {res.send(`YOU GOT AN ERROR! your error: ${err}`)};
+    // console.log(user[0].books);
       res.send(user[0].books);
   });
 }
 
-// Adding a new book in the DB from the frontend:
+// ************************************************************************************
+// Adding data in the DB from the frontend:
 app.post('/user', createNewbook);
 
 function createNewbook(req, res) {
@@ -132,13 +136,12 @@ function createNewbook(req, res) {
       })
       user[0].save();
       res.send(user[0].books);
-      if (err) {res.send('N/A')};
+      if (err) {res.send(`YOU GOT AN ERROR! your error: ${err}`)};
   });
 }
+
 // ************************************************************************************
-
-
-// deleting a book from the dataBase:
+// deleting data from the dataBase:
 app.delete('/user/:id', deleteBooks);
 
 function deleteBooks(req, res) {
@@ -151,7 +154,7 @@ function deleteBooks(req, res) {
       user[0].books = booksArr;
       user[0].save();
       res.send('The book has been successfully deleted');
-      if (err) {res.send('N/A')};
+      if (err) {res.send(`YOU GOT AN ERROR! your error: ${err}`)};
   });
 }
 // ************************************************************************************
