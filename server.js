@@ -6,9 +6,9 @@ require('dotenv').config();
 
 const app = express();
 app.use(cors());
+app.use(express.json());
 const mongoose = require('mongoose');
-const port = process.env.PORT || 3666;
-
+const port = process.env.PORT || 7980;
 
 mongoose.connect(
   'mongodb://127.0.0.1:27017/user',
@@ -110,7 +110,7 @@ function seedUsersCollection() {
   // console.log(hatem);
   // console.log(aseel);
 
-  // hatem.save();
+  hatem.save();
   // aseel.save();
   aseel2.save();
 }
@@ -121,19 +121,56 @@ function seedUsersCollection() {
 
 app.get('/user', getUserInfo);
 
-function getUserInfo(req, res) {
-    const { email } = req.query;
-    // console.log(name);
-    userModel.find({ email: email }, function (err, user) {
-        if (err) {res.send('N/A')};
-        // console.log(user[0].books);
-        res.send(user[0].books);
-    });
-}
-
 app.get('/', (req, res) => {
   res.send('hello useless home page');
 });
+
+function getUserInfo(req, res) {
+  const { email } = req.query;
+  // console.log(name);
+  userModel.find({ email: email }, function (err, user) {
+      if (err) {res.send('N/A')};
+      // console.log(user[0].books);
+      res.send(user[0].books);
+  });
+}
+
+// Adding a new book in the DB from the frontend:
+app.post('/user', createNewbook);
+
+function createNewbook(req, res) {
+  const { bookName, bookDescription,bookStatus, email } = req.body;
+  myOwnerModel.find({ email: email }, (err, user) => {
+    user[0].books.push({
+          name: bookName,
+          description: bookDescription,
+          status: bookStatus,
+      })
+      user[0].save();
+      res.send(user[0].books);
+      if (err) {res.send('N/A')};
+  });
+}
+// ************************************************************************************
+
+
+// deleting a book from the dataBase:
+app.delete('/user/:id', deleteBooks);
+
+function deleteBooks(req, res) {
+  const index = Number(req.params.id);
+  const { email } = req.query;
+  myOwnerModel.find({ email: email }, (err, user) => {
+      const booksArr = user[0].books.filter((book, idx) => {
+          return idx !== index
+      });
+      user[0].books = booksArr;
+      user[0].save();
+      res.send('The book has been successfully deleted');
+      if (err) {res.send('N/A')};
+  });
+}
+// ************************************************************************************
 
 app.listen(port, () => {
   console.log(`Serverinhio startado on ${port}`);
