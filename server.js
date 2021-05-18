@@ -140,7 +140,7 @@ app.post('/user', createNewbook);
 
 function createNewbook(req, res) {
   const { bookName, bookDescription,bookStatus, email } = req.body;
-  myOwnerModel.find({ email: email }, (err, user) => {
+  userModel.find({ email: email }, (err, user) => {
     user[0].books.push({
           name: bookName,
           description: bookDescription,
@@ -160,7 +160,7 @@ app.delete('/user/:id', deleteBooks);
 function deleteBooks(req, res) {
   const index = Number(req.params.id);
   const { email } = req.query;
-  myOwnerModel.find({ email: email }, (err, user) => {
+  userModel.find({ email: email }, (err, user) => {
       const booksArr = user[0].books.filter((book, idx) => {
           return idx !== index
       });
