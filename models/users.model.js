@@ -11,7 +11,7 @@ const userSchema = new mongoose.Schema({
   
   function seedUsersCollection() {
     const hatem = new userModel({
-      email: 'hatemhtm7@gmail.com',
+      email: 'hatemhtm8@gmail.com',
       books: [
         {
           name: 'Spirits Rebellious',

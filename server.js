@@ -3,9 +3,6 @@
 const cors = require('cors');
 const express = require('express');
 const mongoose = require('mongoose');
-const userController = require('./controllers/user.controller');
-const bookModel = require('./models/books.model');
-const userModel = require('./models/users.model');
 require('dotenv').config();
 
 // setting up the server
@@ -15,9 +12,13 @@ const port = process.env.PORT || 7980;
 app.use(cors());
 app.use(express.json());
 
+const userController = require('./controllers/user.controller');
+const bookModel = require('./models/books.model');
+const userModel = require('./models/users.model');
 
+const mongoPort = process.env.MONGODB_URL || 'mongodb://127.0.0.1:27017/user'
 mongoose.connect(
-  'mongodb://127.0.0.1:27017/user',
+  `${mongoPort}`,
   { useNewUrlParser: true, useUnifiedTopology: true }
 );
 
