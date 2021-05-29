@@ -14,7 +14,7 @@ const createNewbook = async (req, res) => {
   const { bookName, bookDescription, bookStatus, email } = req.body;
   // console.log(req.body);
   await userModel.userModel.find({ email: email }, (err, user) => {
-    if (err) { res.send(`YOU GOT AN ERROR! your error: ${err}`) };
+    if (err) { res.send(`YOU GOT AN ERROR!  ${err}`) };
     user[0].books.push({
       name: bookName,
       description: bookDescription,
